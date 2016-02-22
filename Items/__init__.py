@@ -1,4 +1,5 @@
 __all__ = [
        'Item',
        'ArmorObject',
-       'WeaponObject']
+       'WeaponObject',
+       'PotionObject']

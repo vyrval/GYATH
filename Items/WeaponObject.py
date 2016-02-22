@@ -11,13 +11,19 @@ class WeaponObject(Item):
     '''
 
 
-    def __init__(self, category, name, description, cost, attackPoints):
+    def __init__(self, data):
         '''
         Constructor
         '''
-        Item.__init__(self, category, name, description, cost)
-        self.attackPoints= attackPoints
+        data["attackPoints"]= (int)(data.get("attackPoints"))
+        Item.__init__(self, data)
         
     def __str__(self):
-        string= "%s, %s, Attack: %s" % (self.name, self.description, str(self.attackPoints))
+        string= "%s, %s, Attack: %s" % (self.name(), self.description(), str(self.attackPoints()))
         return string
+    
+    def attackPoints(self):
+        return self.get("attackPoints")
+    
+    def getCopy(self):
+        return WeaponObject(self.data)

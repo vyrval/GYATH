@@ -3,11 +3,13 @@ Created on Jan 7, 2016
 
 @author: T0157129
 '''
-import libxml2
+
 import random
+import xml.dom.minidom as minidom
 
 from Items.ArmorObject import ArmorObject
 from Items.WeaponObject import WeaponObject
+from Items.PotionObject import PotionObject
 
 
 class WorldItems:
@@ -45,45 +47,50 @@ class WorldItems:
         Constructor
         '''
         
+        
         self.PotionsDict={}
-        self.initPotionsDict()
+        self.__initPotionsDict()
         
         self.WeaponsDict={}
-        self.initWeaponsDict()
+        self.__initWeaponsDict()
         
         self.ArmorsDict ={}
-        self.initArmorsDict()
+        self.__initArmorsDict()
         
         self.ItemsDict  ={}
-        self.initItemsDict()
+        self.__initItemsDict()
         
        
         
         
-    def initPotionsDict(self):
-        self.PotionsDict["HP_potion"]={}
-        self.PotionsDict["MP_potion"]={}
+    def __initPotionsDict(self):
+        self.PotionsDict["HP"]={}
+        self.PotionsDict["MP"]={}
         
-    def initWeaponsDict(self):
+        self.__FillPotionsDictFromXML("./XML_Files/PotionsFile.xml")
+        
+        
+    def __initWeaponsDict(self):
         self.WeaponsDict["notPlayerUsable"]={}
         self.WeaponsDict["basic"]={}
         self.WeaponsDict["common"]={}
         self.WeaponsDict["epic"]={}
         self.WeaponsDict["legendary"]={}
         
-        self.FillWeaponsDictFromXML("./WeaponsFile.xml")
+        self.__FillWeaponsDictFromXML("./XML_Files/WeaponsFile.xml")
         
-    def initArmorsDict(self):
+        
+    def __initArmorsDict(self):
         self.ArmorsDict["notPlayerUsable"]={}
         self.ArmorsDict["basic"]={}
         self.ArmorsDict["common"]={}
         self.ArmorsDict["epic"]={}
         self.ArmorsDict["legendary"]={}
         
-        self.FillArmorsDictFromXML("./ArmorsFile.xml")
+        self.__FillArmorsDictFromXML("./XML_Files/ArmorsFile.xml")
         
         
-    def initItemsDict(self):
+    def __initItemsDict(self):
         self.ItemsDict["key"]={}
     
     
@@ -104,21 +111,17 @@ class WorldItems:
                 ...
             </Armors>
     '''
-    def FillArmorsDictFromXML(self, fileName):
-        file = libxml2.parseFile(fileName)
-        root = file.children
-        armor = root.children
-        while armor is not None:
-            if armor.type == "element":
-                category        = armor.prop("category")
-                name            = armor.prop("name")
-                desc            = armor.prop("description")
-                defensePoints   = int(armor.prop("defensePoints"))
-                cost            = int(armor.prop("cost"))
-                
-                self.ArmorsDict[category][name]= ArmorObject(category, name, desc, cost, defensePoints)
-            armor= armor.next
+    def __FillArmorsDictFromXML(self, fileName):
+        '''
         
+        '''
+        
+        file = minidom.parse(fileName)
+        armors = file.getElementsByTagName("Armor")
+        for armor in armors:
+            data= self.__parseAttributes(armor)            
+            self.ArmorsDict[data.get('category')][data.get('name')]= ArmorObject(data)
+       
     '''
     void FillWeaponsDictFromXML(fileName)
         Open the XML file named "fileName" and look for Weapons.
@@ -133,21 +136,24 @@ class WorldItems:
                 ...
             </Weapons>
     '''
-    def FillWeaponsDictFromXML(self, fileName):
-        file = libxml2.parseFile(fileName)
-        root = file.children
-        weapon = root.children
-        while weapon is not None:
-            if weapon.type == "element":
-                category        = weapon.prop("category")
-                name            = weapon.prop("name")
-                desc            = weapon.prop("description")
-                attackPoints    = int(weapon.prop("attackPoints"))
-                cost            = int(weapon.prop("cost"))
-                
-                self.WeaponsDict[category][name]= WeaponObject(category, name, desc, cost, attackPoints)
-            weapon= weapon.next     
+    def __FillWeaponsDictFromXML(self, fileName):
+        file = minidom.parse(fileName)
+        weapons = file.getElementsByTagName("Weapon")
+        for weapon in weapons:
+            data= self.__parseAttributes(weapon)             
+            self.WeaponsDict[data.get('category')][data.get('name')]= WeaponObject(data)
+            
+       
+    def __FillPotionsDictFromXML(self, fileName):
+        file = minidom.parse(fileName)
+        potions = file.getElementsByTagName("Potion")
         
+        for potion in potions:
+            data= self.__parseAttributes(potion)        
+            self.PotionsDict[data.get('category')][data.get('name')]= PotionObject(data)
+          
+            
+            
     ########################################
     #    get random Item from the dictionaries
     ########################################  
@@ -156,45 +162,54 @@ class WorldItems:
         Return a random armor in the given category
     '''
     def getArmorByCategory(self, category):
-        return self.getItemFromDictByCategory(self.ArmorsDict, category)
+        return self.__getItemFromDictByCategory(self.ArmorsDict, category)
     '''
     WeaponObject getWeaponByCategory(category)
         Return a random weapon in the given category
     '''
     def getWeaponByCategory(self, category):
-        return self.getItemFromDictByCategory(self.WeaponsDict, category)
+        return self.__getItemFromDictByCategory(self.WeaponsDict, category)
     '''
     Potion getPotionByCategory(category)
         Return a random potion in the given category
     '''
     def getPotionByCategory(self, category):
-        return self.getItemFromDictByCategory(self.PotionsDict, category)
+        return self.__getItemFromDictByCategory(self.PotionsDict, category)
     '''
     Item getItemByCategory(category)
         Return a random item in the given category
     '''
     def getItemByCategory(self, category):
-        return self.getItemFromDictByCategory(self.ItemsDict, category)
+        return self.__getItemFromDictByCategory(self.ItemsDict, category)
     
     '''
     Item getItemFromDictByCategory(mdict, category)
         Return a random item in the given mdict, within the given category.
     '''
-    def getItemFromDictByCategory(self, mdict, category):
+    def __getItemFromDictByCategory(self, mdict, category):
         ItemsInCat= mdict[category]
         ItemName= random.choice(list(ItemsInCat.keys()))
-        return ItemsInCat[ItemName]
+        return ItemsInCat[ItemName].getCopy()
     
     
     
     
     def getWeapon(self, weaponName):
-        return self.getItemFromDict(self.WeaponsDict, weaponName)
+        return self.__getItemFromDict(self.WeaponsDict, weaponName)
     def getArmor(self, armorName):
-        return self.getItemFromDict(self.ArmorsDict, armorName)
+        return self.__getItemFromDict(self.ArmorsDict, armorName)
+    def getPotion(self, potionName):
+        return self.__getItemFromDict(self.PotionsDict, potionName)
     
-    def getItemFromDict(self, mdict, ItemName):
+    def __getItemFromDict(self, mdict, ItemName):
         for category in mdict.keys():
             if mdict[category].has_key(ItemName):
-                return mdict[category][ItemName]
+                return mdict[category][ItemName].getCopy()
         return None
+    
+    
+    def __parseAttributes(self, Xml_elemt):
+        data={}
+        for attrName, attrValue in Xml_elemt.attributes.items():
+            data[attrName]=attrValue
+        return data

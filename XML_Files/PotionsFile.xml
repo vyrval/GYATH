@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Potions>
+<!-- HP-->
+	<Potion 
+		category="HP"
+		name="HP_potion"
+		description="A little potion bottle."
+		cost="0"
+		usable="True"/>
+</Potions>

@@ -6,6 +6,7 @@ Created on Jan 6, 2016
 import logging
 import logging.config
 
+from Items.PotionObject import PotionObject
 
 class MyCharacter:
     '''
@@ -33,21 +34,18 @@ class MyCharacter:
         '''
         Constructor
         '''
-        logging.basicConfig(level=logging.DEBUG, disable_existing_loggers=False)        
-        self.logger = logging.getLogger(__name__)
 
-        
+
+        self.HPinit= HP
         self.HP = HP
         self.name = name
-        self.lvl= level
+        self.level= level
         
         self.equipment= {}
         self.equipment["weapon"]=None
         self.equipment["armor"]=None
         
         self.bag={}
-        self.bag["HP_potion"]=0
-    
     
     '''
     boolean isAlive()
@@ -73,7 +71,7 @@ class MyCharacter:
                 self.addToBag(actualWeapon)
             
             self.equipment["weapon"]= weaponObject
-            self.logger.info("Weapon equipped: %s" % weaponObject.name)
+#             self.logger.info("Weapon equipped: %s" % weaponObject.name)
             
     '''
     void equipArmor(armorObject)
@@ -87,7 +85,7 @@ class MyCharacter:
                 self.addToBag(actualArmor)
             
             self.equipment["armor"]= armorObject
-            self.logger.info("Armor equipped: %s" % armorObject.name)
+#             self.logger.info("Armor equipped: %s" % armorObject.name)
 
     '''
     weaponObject getWeapon()
@@ -119,9 +117,9 @@ class MyCharacter:
         Print the content of the character's bag
     '''
     def listInventory(self):
-        print( '-- INVENTORY CONTAINS:')
-        for itemName, item in self.bag:
-            print (itemName, ' ', item.description) 
+        print( '-- INVENTORY OF %s CONTAINS:' % self.name)
+        for itemName in self.bag.keys():
+            print ("    |%s" % self.bag[itemName]) 
     
     '''
     void addToBag(itemObject)
@@ -140,6 +138,39 @@ class MyCharacter:
     def getFromBag(self, itemName):
         return self.bag[itemName]
     
+    '''
+    itemObject takeFromBag(itemName)
+        Get the object named "itemName" from the bag.
+        The object is no longer in the bag.
+        If there is no itemObject named like this in the bag, return None. 
+    '''
+    def takeFromBag(self, itemName):
+        return self.bag.pop(itemName)
+    
+    def removeFromBag(self, itemName):
+        self.bag.pop(itemName)
+    
+    
+    '''
+    void useFromBag(itemName)
+        If an item with this name is found, call its use function.
+    '''
+    def useFromBag(self, itemName):
+        item= self.bag.get(itemName)
+        if item is not None:
+            if item.get('usable') is None:
+                return
+            else:
+                #If it's not a potion we remove the object from the bag
+                if not isinstance(item, PotionObject):
+                    item= self.takeFromBag(itemName)
+                        
+                if item is None:
+                    print("No such object in the bag.")
+                else:
+                    item.use(self)
+            
+                
     
     ########################################
     #    FIGHT management
@@ -152,14 +183,14 @@ class MyCharacter:
         armor= self.equipment["armor"]
         
         if armor != None:
-            m_damagePoints = damagePoints - armor.defensePoints
+            m_damagePoints = damagePoints - armor.defensePoints()
             if m_damagePoints < 0:
                 m_damagePoints=0
         else:
             m_damagePoints = damagePoints
         
         self.HP = self.HP - m_damagePoints
-        print("%d HP lost..." % m_damagePoints)
+        print("%s has lost %d HP..." % (self.name,m_damagePoints))
         
     
     '''
@@ -171,15 +202,37 @@ class MyCharacter:
         weapon = self.equipment["weapon"]
         
         if weapon != None:
-            characterObject.defend(weapon.attackPoints)
+            print("%s attacks." % self.name)
+            characterObject.defend(weapon.attackPoints())
         else:
-            print("No weapon...")
+            print("%s can't attack, no weapon..." % self.name)
         
         
         
     ########################################
-    #    Print management
+    #    Other functions
     ########################################
-    
         
+    '''
+    unitsUsed fillHP(units)
+        Refill HP bar with units points.
+        Return the number of units recovered. 
+        (Can be:    0 if HP == HPinit
+                 or units
+                 or the difference between HP and HPinit if HP+units > HPinit)   
+    '''
+    def fillHP(self, units):
+        unitsUsed= 0
+        if self.HP < self.HPinit:
+            #Restore HP 
+            if self.HP + units >= self.HPinit:
+                unitsUsed= self.HPinit - self.HP
+            else:
+                unitsUsed= units
+            self.HP= self.HP + unitsUsed
+            print("%s recovered %d HP." % (self.name, unitsUsed))
+        else:
+            print("%s HP already full." % self.name)
+            
+        return unitsUsed
         

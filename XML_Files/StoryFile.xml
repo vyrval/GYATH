@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Story>
+<!-- INTRO -->
+	<Event	name="intro"
+		description="The introduction of the game."
+		text="Here your adventure begins. You will face lot of monsters etc.... Be ready. Choose the direction (left or right).">
+		<Next
+			action="left"
+			value="west_entry"/>
+		<Next
+			action="right"
+			value="east_entry"/>
+	</Event>
+<!-- WEST_ENTRY -->
+	<Event	name="west_entry"
+		description="Player choose to go left."
+		text="You find an old door.">
+		<Next
+			action="knock"
+			value="door_w1"/>
+		<Next
+			action="force_lock"
+			value="door_w2"/>
+		<Next
+			action="back"
+			value="east_entry"/>
+	</Event>
+	
+	<Event	name="door_w1"
+		description="Player choose to knock the door."
+		text="You knock, twice. Nothing seems to happen. After a time someone open the door: 'What do you want human?'">
+		<Next
+			action="talk"
+			value="door_w3"/>
+		<Next
+			action="fight"
+			enemy="ghost"
+			reward=""
+			value="door_w4"/>
+	</Event>
+	
+	<Event	name="door_w2"
+		description="Player choose to force the lock."
+		text="You failed to force the lock...">
+		<Next
+			action="knock"
+			value="door_w1"/>
+		<Next
+			action="back"
+			value="east_entry"/>
+	</Event>
+	
+	<Event	name="door_w3"
+		description="Player choose to talk to the man."
+		text="You explain that you need help. The man closes the door.">
+		<Next
+			action="back"
+			value="east_entry"/>
+	</Event>
+	
+	<Event	name="door_w4"
+		description="Player beats the ghost and enters."
+		text="You enter, find a long cooridor, walk almost an hour before falling into a trap... You're dead...">
+		<Next
+			action="die"
+			value="end"/>
+	</Event>
+	
+<!-- EAST_ENTRY -->
+	<Event	name="east_entry"
+		description="Player choose to go right."
+		text="You walk in an old and dark forest and get lost.">
+		<Next
+			action="die"
+			value="end"/>
+	</Event>	
+
+<!-- END -->
+	<Event	name="end"
+		description="The player loose."
+		text="GAME OVER">
+		<Next
+			action=""
+			value=""/>
+	</Event>
+</Story>

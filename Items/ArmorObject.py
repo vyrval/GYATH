@@ -13,13 +13,24 @@ class ArmorObject(Item):
     '''
 
 
-    def __init__(self, category, name, description, cost, defensePoints):
+    def __init__(self, data):
         '''
         Constructor
         '''
-        Item.__init__(self, category, name, description, cost)
-        self.defensePoints= defensePoints
+        data["defensePoints"]= (int)(data.get("defensePoints"))
+        Item.__init__(self, data)
         
+        
+    def use(self, character):
+        character.equipArmor(self)
+        
+    def defensePoints(self):
+        return self.get('defensePoints')
+        
+            
     def __str__(self):
-        string= "%s, %s, Defense: %s" % (self.name, self.description, str(self.defensePoints))
+        string= "%s, %s, Defense: %s" % (self.name(), self.description(), str(self.defensePoints()))
         return string
+    
+    def getCopy(self):
+        return ArmorObject(self.data)

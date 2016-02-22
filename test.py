@@ -1,4 +1,12 @@
-from Items.Item import Item
+from Prefabs.WorldItems import WorldItems
 
-it= Item("cat","name","desc", "cost")
-print("Item: %s" % it.name)
+
+import xml.dom.minidom as minidom
+
+WI= WorldItems()
+weapon= WI.getWeaponByCategory('basic')
+print(weapon.attackPoints())
+print(type(weapon.attackPoints()))
+
+
+print("end")

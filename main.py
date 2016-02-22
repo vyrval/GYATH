@@ -9,21 +9,17 @@ import logging
 
 
 def main(argv):
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+#     logging.basicConfig(level=logging.INFO)
+#     logger = logging.getLogger(__name__)
     
     
-    print("##################################################")
-    print("                THE GAME BEGINS")
-    print("##################################################")
+    
     myGame = Game()
 
-    while myGame.onGame():
+    while not myGame.isGameOver():
         myGame.onTurn()
     
-    print("##################################################")
-    print("                 THE GAME ENDS")
-    print("##################################################")
+
 
 
 #################################################################    

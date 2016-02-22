@@ -10,14 +10,31 @@ class Item:
     '''
 
 
-    def __init__(self, category, name, description, cost):
+    def __init__(self, data):
         '''
         Constructor
-        '''
-        self.category   =category
-        self.name       =name
-        self.description=description
-        self.cost       =cost
+        '''        
+        self.data= data
+        
         
     def __str__(self):
         return self.name
+    
+    
+    def category(self):
+        return self.data.get("category")
+    
+    def name(self):
+        return self.data.get("name")
+    
+    def description(self):
+        return self.data.get("description")
+    
+    def cost(self):
+        return self.data.get("cost")
+
+
+    def get(self, name):
+        return self.data.get(name)
+    def set(self, name, value):
+        self.data[name]= value

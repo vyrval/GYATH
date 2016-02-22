@@ -12,13 +12,15 @@ class Enemy(MyCharacter):
     '''
 
 
-    def __init__(self, category, name, description, HP, lvl):
+    def __init__(self, category, name, description, HP, lvl, expPoints):
         '''
         Constructor
         '''
         MyCharacter.__init__(self, HP, name, lvl)
         self.description = description
         self.category = category
+        
+        self.expPoints= expPoints
         
     def __str__(self):
         string= """
@@ -29,6 +31,13 @@ class Enemy(MyCharacter):
                     Weapons: %s
                     Armor: %s
                     -------------""" \
-                % (self.name, self.description, self.HP, self.lvl, self.equipment["weapon"], self.equipment["armor"])
+                % (self.name, self.description, self.HP, self.level, self.equipment["weapon"], self.equipment["armor"])
         
         return string
+    
+    
+    def getCopy(self):
+        copy= Enemy(self.category, self.name, self.description, self.HP, self.level, self.expPoints)
+        copy.equipArmor(self.equipment["armor"])
+        copy.equipWeapon(self.equipment["weapon"])
+        return copy
