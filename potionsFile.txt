@@ -1,0 +1,29 @@
+This file contains every potions of the game.
+--------------------------------------
+Data are stored following this scheme:
+<CATEGORY>
+<NAME>
+<DESCRIPTION>
+<AMOUNT OF H/M POINTS GIVEN>
+<COST>
+_ _ _ _ _ _
+
+START
+HP_potions
+HP_20
+A little bottle of potions that heals you 20 health points.
+20
+50
+_ _ _ _ _ _
+HP_potions
+HP_50
+A bottle of potions that heals you 50 health points.
+50
+75
+_ _ _ _ _ _
+HP_potions
+HP_100
+A huge bottle of potions that heals you 100 health points.
+100
+200
+_ _ _ _ _ _

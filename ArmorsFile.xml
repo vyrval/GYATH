@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Armors>
+<!-- notPlayerUsable -->
+	<Armor 
+		category="notPlayerUsable"
+		name="leather"
+		description="Animal leather"
+		defensePoints="1"
+		cost="0"/>
+<!-- basic -->
+	<Armor 
+		category="basic"
+		name="clothes"
+		description="Simple clothes. Not a great defense."
+		defensePoints="1"
+		cost="10"/>
+	<Armor 
+		category="basic"
+		name="farmers clothes"
+		description="farmers' clothes."
+		defensePoints="2"
+		cost="500"/>
+<!-- common -->
+	<Armor 
+		category="common"
+		name="leather armor"
+		description="A common armor made with poor leather."
+		defensePoints="5"
+		cost="500"/>
+<!-- epic -->
+	<Armor 
+		category="epic"
+		name="iron armor"
+		description="An iron armor made for warriors."
+		defensePoints="10"
+		cost="1000"/>
+<!-- legendary -->
+	<Armor 
+		category="legendary"
+		name="golden plate armor"
+		description="The great king's armor."
+		defensePoints="15"
+		cost="10000"/>
+		
+</Armors>

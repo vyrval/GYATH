@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Weapons>
+<!-- notPlayerUsable -->
+	<Weapon 
+		category="notPlayerUsable"
+		name="claws"
+		description="claws"
+		attackPoints="2"
+		cost="0"/>
+	<Weapon 
+		category="notPlayerUsable"
+		name="fangs"
+		description="fangs"
+		attackPoints="2"
+		cost="0"/>
+	<Weapon 
+		category="notPlayerUsable"
+		name="chains"
+		description="Rusted chains."
+		attackPoints="2"
+		cost="0"/>
+	<Weapon 
+		category="notPlayerUsable"
+		name="flame"
+		description="Huge fire balls"
+		attackPoints="20"
+		cost="0"/>
+<!-- basic -->
+	<Weapon 
+		category="basic"
+		name="wooden sword"
+		description="Well... Actually, it's just a stick."
+		attackPoints="1"
+		cost="1"/>
+	<Weapon 
+		category="basic"
+		name="rocks bag"
+		description="A little bag full of little rocks"
+		attackPoints="2"
+		cost="2"/>
+<!-- common -->
+	<Weapon 
+		category="common"
+		name="sword"
+		description="A common sword."
+		attackPoints="5"
+		cost="50"/>
+<!-- epic -->
+	<Weapon 
+		category="epic"
+		name="dwarf hammer"
+		description="An well manufactured hammer that can easily break bones."
+		attackPoints="20"
+		cost="200"/>
+<!-- legendary -->
+	<Weapon 
+		category="legendary"
+		name="lightsaber"
+		description="Really impressive, this sword is."
+		attackPoints="50"
+		cost="10000"/>
+		
+</Weapons>
