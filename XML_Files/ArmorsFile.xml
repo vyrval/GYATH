@@ -7,6 +7,12 @@
 		description="Animal leather"
 		defensePoints="1"
 		cost="0"/>
+	<Armor 
+		category="notPlayerUsable"
+		name="dragon skin"
+		description="Some say that nothing can hurt a dragon."
+		defensePoints="10"
+		cost="0"/>
 <!-- basic -->
 	<Armor 
 		category="basic"

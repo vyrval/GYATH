@@ -6,6 +6,10 @@ Created on Jan 13, 2016
 
 from Items.Item import Item
 
+from Utilities import UserInteract as ui
+
+
+
 class PotionObject(Item):
     '''
     category can be "MP" or "HP"
@@ -15,20 +19,13 @@ class PotionObject(Item):
     def __init__(self, data):
         '''
         Constructor
-        '''
-        data["contentMax"]  = 100
-        data["content"]     = 0       
+        '''      
         Item.__init__(self, data)
-
+        self.set("contentMax", 100)
+        self.set("content", 0 )
         
     def getCopy(self):
-        data= {}
-        data["category"]    =self.category()
-        data["name"]        =self.name()
-        data["description"] =self.description()
-        data["cost"]        =self.cost()
-        
-        Pot= PotionObject(data)
+        Pot= PotionObject(self.data)
         return Pot
     
     
@@ -63,14 +60,14 @@ class PotionObject(Item):
             print("%s is empty..." % self.name())
         else:
             units= self.__getUnits()
-            if self.category == "HP":
-                    unitsToUse= units
-                    if self.content < unitsToUse:
-                        unitsToUse = self.content
-                        
-                    unitsUsed= character.fillHP(unitsToUse)
-                    self.set("content", self.data.get('content') - unitsUsed)
-                    print("%d units remaining in %s. (over %d)" % (self.get('content'), self.name(), self.get('contentMax')))
+            if self.category() == "HP":
+                unitsToUse= units
+                if self.get('content') < unitsToUse:
+                    unitsToUse = self.get('content')
+                    
+                unitsUsed= character.fillHP(unitsToUse)
+                self.set("content", self.get('content') - unitsUsed)
+                print("%d/%d units remaining in %s." % (self.get('content'), self.get('contentMax'), self.name()))
             
     '''
     units __getUnits()
@@ -78,17 +75,8 @@ class PotionObject(Item):
         Return the number of units.
     '''
     def __getUnits(self):
-        units=0
-        valid= False
-        
-        while not valid:
-            units= raw_input("How many do you want to use? ")
-            try :
-                units_val= int(units)
-                valid= True
-            except ValueError:
-                print("It doesn't make sens...")
-        return units_val
+        units=ui.userInputInt("How many do you want to use? (%d units remaining) " % (self.get('content')))
+        return units
         
     
     def __str__(self):

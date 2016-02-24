@@ -54,9 +54,9 @@ class Printer:
     
     def intro(self, character):
         mstring= """
-*   *   *   *   *   *   *
- * * * * * * * * * * * *
-  *   *   *   *   *   *
+*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *
 Welcome %s, you are the chosen one. The one that will fight against all. 
 Go ahead and defeat all creatures you can... 
 HP: %s

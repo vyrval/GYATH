@@ -6,6 +6,8 @@ Created on Jan 14, 2016
 
 
 from Utilities.Switch import switch
+from Utilities import XmlParser as xmlp
+
 
 import logging
 
@@ -24,21 +26,16 @@ class Action:
         self.game= gameObj
 
         #Parse properties
-        
-        self.name       = XmlAction.attributes["action"].value
-        if self.name == "fight":
-            self.enemy = XmlAction.attributes["enemy"].value
-        
-        self.nextEvent  = XmlAction.attributes["value"].value
-        
+        self.data= xmlp.parseAttributes(XmlAction)
+
+
     
     def doIt(self):
+        player = self.game.player
         
-        for case in switch(self.name):
+        for case in switch(self.name()):
             if case('fight'):
-                enemy= self.game.EG.getEnemyByName(self.enemy)
-                player = self.game.player
-                
+                enemy= self.game.EG.getEnemyByName(self.get('enemy'))
                 while player.isAlive() and enemy.isAlive() :
                     print("# # # # # # # # # # # # # # # #")
                     self.game.printer.character(player)
@@ -51,13 +48,17 @@ class Action:
                     else: 
                         print("You've defeated the %s!!!" % enemy.name)
                         player.gainExp(enemy.expPoints)
+                        reward=self.get('reward') 
+                        if reward is not None:
+                            objReward= self.game.WI.get(reward)
+                            player.loot(objReward)
                     print("# # # # # # # # # # # # # # # #")
                     raw_input()
                     
                 enemy= None
                 
                 if player.isAlive():
-                    return self.nextEvent
+                    return self.next()
                 else:
                     self.game.endGame()
                     return "die"
@@ -68,8 +69,25 @@ class Action:
                 break
             
             if case(): # default, could also just omit condition or 'if True'
-                return self.nextEvent
+                reward=self.get('reward') 
+                if reward is not None:
+                    objReward= self.game.WI.get(reward)
+                    player.loot(objReward)
+                return self.next()
                 # No need to break here, it'll stop anyway
     
+    
+    def name(self):
+        return self.get("action")
+    def next(self):
+        return self.get("next")
+    
+    
+    def get(self, name):
+        return self.data.get(name)
+    def set(self, name, val):
+        self.data[name]=val
+    
+    
     def __str__(self):
-        return self.name
+        return self.name()

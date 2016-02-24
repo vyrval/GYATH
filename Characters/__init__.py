@@ -6,4 +6,5 @@ Created on Jan 6, 2016
 __all__ = [
        'Character',
        'Player',
-       'Enemy']
+       'Enemy',
+       'Merchant']

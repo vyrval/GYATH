@@ -5,6 +5,12 @@ Created on Jan 6, 2016
 '''
 from Characters.Character import MyCharacter
 from Utilities.Switch import switch
+from Utilities import UserInteract as ui
+
+from Items.ArmorObject import ArmorObject
+from Items.Item import Item
+from Items.PotionObject import PotionObject
+from Items.WeaponObject import WeaponObject
 
 
 class Player(MyCharacter):
@@ -13,12 +19,16 @@ class Player(MyCharacter):
     '''
 
 
-    def __init__(self):
+    def __init__(self, HP):
         '''
         Constructor
         '''
+        HP_player= 100
+        if HP is not None:
+            HP_player= (int)(HP)
+            
         name = raw_input("Enter your name: ")
-        MyCharacter.__init__(self, 100, name, 1)
+        MyCharacter.__init__(self, HP_player, name, 1)
         
         self.exp= 0
         self.expMax= 100
@@ -50,10 +60,10 @@ class Player(MyCharacter):
     def __lvlup(self):
         gainHP = 20
         
-        self.exp = self.exp-self.expMax
-        self.level = self.level + 1
+        self.exp    = self.exp-self.expMax
+        self.level  = self.level + 1
         self.HPinit = self.HPinit + gainHP
-        self.HP = self.HP + gainHP
+        self.HP     = self.HP + gainHP
         print("%s has just reached level %d." % (self.name, self.level))
         
         
@@ -68,15 +78,11 @@ class Player(MyCharacter):
         print(string)
         
         #Parse the user input
-        valid = False
-        while not valid:
-            userAction = raw_input("What do you want to do? ")
-            if userAction in actions:
-                actionToDo={}
-                actionToDo["action"]=userAction
-                actionToDo["enemy"] =EnemyObj
-                valid= True
-                self.__parseUserAction(actionToDo)
+        userAction =ui.userIput("What do you want to do? ", actions)
+        actionToDo={}
+        actionToDo["action"]=userAction
+        actionToDo["enemy"] =EnemyObj
+        self.__parseUserAction(actionToDo)
     
     def __parseUserAction(self, action):
         
@@ -91,6 +97,70 @@ class Player(MyCharacter):
             
         
         
-        
+    def loot(self, reward):
+        if reward is not None:
+            print("You've found %s." % (reward))
+            availableAct=[]
+            availableAct.append('discard')
+            availableAct.append('put_in_bag')
+            
+            if isinstance(reward, ArmorObject):
+                print("You're equipped with %s" % (self.equipment["armor"]))
+                availableAct.append('equip')
+            
+            elif isinstance(reward, WeaponObject):
+                print("You're equipped with %s" % (self.equipment["weapon"]))
+                availableAct.append('equip')
 
-        
+            elif isinstance(reward, Item):
+                pass
+            
+            elif isinstance(reward, PotionObject):
+                if reward.category() == 'HP':
+                    availableAct.remove('put_in_bag')
+                    potion= self.bag.get('HP_potion')
+                    if potion is not None:
+                        print("Your have %d/%d HP." %(self.HP, self.HPinit))
+                        print("Your HP potion contains %d/%d units." % (potion.get('content'), potion.get('contentMax')))
+                        availableAct.append('fill')
+                        availableAct.appenf('use')
+            
+            string= "Available actions: "
+            for act in availableAct:
+                string= string + ' ' + act
+            print(string)
+            
+            useraction= ui.userIput("What do you want to do? ", availableAct)
+            self.__parseActions(useraction, reward)
+            
+            
+    def __parseActions(self, userAction, reward):
+        for case in switch(userAction):
+            if case('discard'):
+                break
+            
+            if case('put_in_bag'):
+                self.addToBag(reward)
+                break
+            
+            if case('equip'):
+                if isinstance(reward, WeaponObject):
+                    self.equipWeapon(reward)
+                if isinstance(reward, ArmorObject):
+                    self.equipArmor(reward)
+                break
+            
+            if case('fill'):
+                if isinstance(reward, PotionObject):
+                    if reward.category() == "HP":
+                        potion= self.bag.get("HP_potion")
+                        if potion is not None:
+                            potion.fill()
+                break
+            
+            if case('use'):
+                reward.use(self)
+                break
+            
+               
+            

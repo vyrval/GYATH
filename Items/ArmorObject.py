@@ -17,8 +17,8 @@ class ArmorObject(Item):
         '''
         Constructor
         '''
-        data["defensePoints"]= (int)(data.get("defensePoints"))
         Item.__init__(self, data)
+        self.data["defensePoints"]= (int)(data.get("defensePoints"))
         
         
     def use(self, character):

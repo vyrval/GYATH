@@ -4,6 +4,9 @@ Created on Jan 6, 2016
 @author: T0157129
 '''
 
+import copy
+
+
 class Item:
     '''
     This class represents any item of the game.
@@ -13,7 +16,7 @@ class Item:
     def __init__(self, data):
         '''
         Constructor
-        '''        
+        '''
         self.data= data
         
         

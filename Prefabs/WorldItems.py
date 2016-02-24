@@ -4,13 +4,15 @@ Created on Jan 7, 2016
 @author: T0157129
 '''
 
+
+
 import random
 import xml.dom.minidom as minidom
 
 from Items.ArmorObject import ArmorObject
 from Items.WeaponObject import WeaponObject
 from Items.PotionObject import PotionObject
-
+from Utilities import XmlParser as xmlp
 
 class WorldItems:
     '''
@@ -60,7 +62,11 @@ class WorldItems:
         self.ItemsDict  ={}
         self.__initItemsDict()
         
-       
+        self.dictList=[]
+        self.dictList.append(self.PotionsDict)
+        self.dictList.append(self.WeaponsDict)
+        self.dictList.append(self.ArmorsDict)
+        self.dictList.append(self.ItemsDict)
         
         
     def __initPotionsDict(self):
@@ -119,7 +125,7 @@ class WorldItems:
         file = minidom.parse(fileName)
         armors = file.getElementsByTagName("Armor")
         for armor in armors:
-            data= self.__parseAttributes(armor)            
+            data= xmlp.parseAttributes(armor)            
             self.ArmorsDict[data.get('category')][data.get('name')]= ArmorObject(data)
        
     '''
@@ -140,7 +146,7 @@ class WorldItems:
         file = minidom.parse(fileName)
         weapons = file.getElementsByTagName("Weapon")
         for weapon in weapons:
-            data= self.__parseAttributes(weapon)             
+            data= xmlp.parseAttributes(weapon)             
             self.WeaponsDict[data.get('category')][data.get('name')]= WeaponObject(data)
             
        
@@ -149,7 +155,7 @@ class WorldItems:
         potions = file.getElementsByTagName("Potion")
         
         for potion in potions:
-            data= self.__parseAttributes(potion)        
+            data= xmlp.parseAttributes(potion) 
             self.PotionsDict[data.get('category')][data.get('name')]= PotionObject(data)
           
             
@@ -189,7 +195,8 @@ class WorldItems:
     def __getItemFromDictByCategory(self, mdict, category):
         ItemsInCat= mdict[category]
         ItemName= random.choice(list(ItemsInCat.keys()))
-        return ItemsInCat[ItemName].getCopy()
+        item= ItemsInCat[ItemName].getCopy()
+        return item
     
     
     
@@ -208,8 +215,11 @@ class WorldItems:
         return None
     
     
-    def __parseAttributes(self, Xml_elemt):
-        data={}
-        for attrName, attrValue in Xml_elemt.attributes.items():
-            data[attrName]=attrValue
-        return data
+    
+    def get(self, ObjectName):
+        for mdict in self.dictList:
+            object= self.__getItemFromDict(mdict, ObjectName)
+            if object is not None:
+                return object
+        print("[DEBUG]---%s----- %s not found in lib." % (self.__class__.__name__, ObjectName))
+        return None

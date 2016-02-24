@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Available fields 
+* hp: 		(integer) 	MANDATORY	Represents the amount of Health Points the player begins with.
+* weapon: 	(string)				The name of the weapon  the player begins with. If not given, random weapon in basic category.
+* armor:	(string)				The name of the armor  the player begins with. If not given, random armor in basic category.
+* potion:	(bool)		MANDATORY	Is the HP_potion full or not (True= full, False= empty).
+-->
+
+<Mode>
+<DifficultyMode id="EASY"
+		hp="100"
+		weapon="sword"
+		armor="leather armor"
+		potion="True"
+		/>
+<DifficultyMode id="NORMAL" 
+		hp="100"
+		weapon="rocks bag"
+		armor="farmers clothes"
+		potion="True"
+		/>
+<DifficultyMode id="HARD" 
+		hp="10"
+		armor=""
+		potion="False"
+		/>
+</Mode>

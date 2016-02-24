@@ -1,15 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Available fields
+
+		Event:
+* name 			(string)	MANDATORY	The name of the event.
+* description	(string)	MANDATORY	A little description. It helps you organize yourself. Not printed in game (can be empty).
+* text			(string)	MANDATORY	The text the player will see in game.
+* Next			(XML elemt)	MANDATORY	This represents a possible action of the user.
+
+		Next:
+* action		(string)	MANDATORY	The name of the action. That's what the player should write to initiate this particular action.
+	fight:	Begin a fight with the enemy you gave.
+	die:	End the game.
+* next			(string)	MANDATORY	The name of the Event this action will lead to.
+* enemy			(string)				The name of the enemy the player will have to fight here (can't be empty). (action must be 'fight').
+* reward		(string)				The name of the object the player will get if he defeats the enemy.
+-->
 <Story>
 <!-- INTRO -->
 	<Event	name="intro"
 		description="The introduction of the game."
-		text="Here your adventure begins. You will face lot of monsters etc.... Be ready. Choose the direction (left or right).">
+		text="Here your adventure begins. You will face lot of monsters etc.... Be ready.
+		On your left you see a scary mansion.
+		On your right, the edge of a big forest.
+		Where do you go?">
 		<Next
 			action="left"
-			value="west_entry"/>
+			next="west_entry"/>
 		<Next
 			action="right"
-			value="east_entry"/>
+			next="east_entry"/>
 	</Event>
 <!-- WEST_ENTRY -->
 	<Event	name="west_entry"
@@ -17,53 +36,101 @@
 		text="You find an old door.">
 		<Next
 			action="knock"
-			value="door_w1"/>
+			next="door1_w1"/>
 		<Next
 			action="force_lock"
-			value="door_w2"/>
+			next="door1_w2"/>
 		<Next
 			action="back"
-			value="east_entry"/>
+			next="east_entry"/>
 	</Event>
 	
-	<Event	name="door_w1"
+	<Event	name="door1_w1"
 		description="Player choose to knock the door."
 		text="You knock, twice. Nothing seems to happen. After a time someone open the door: 'What do you want human?'">
 		<Next
 			action="talk"
-			value="door_w3"/>
+			next="door1_w3"/>
 		<Next
 			action="fight"
 			enemy="ghost"
-			reward=""
-			value="door_w4"/>
+			reward="dwarf hammer"
+			next="hall"/>
 	</Event>
 	
-	<Event	name="door_w2"
+	<Event	name="door1_w2"
 		description="Player choose to force the lock."
 		text="You failed to force the lock...">
 		<Next
 			action="knock"
-			value="door_w1"/>
+			next="door1_w1"/>
 		<Next
 			action="back"
-			value="east_entry"/>
+			next="east_entry"/>
 	</Event>
 	
-	<Event	name="door_w3"
+	<Event	name="door1_w3"
 		description="Player choose to talk to the man."
 		text="You explain that you need help. The man closes the door.">
 		<Next
 			action="back"
-			value="east_entry"/>
+			next="east_entry"/>
 	</Event>
 	
-	<Event	name="door_w4"
+	<Event	name="hall"
 		description="Player beats the ghost and enters."
-		text="You enter, find a long cooridor, walk almost an hour before falling into a trap... You're dead...">
+		text="You enter and find a long corridor leading to a huge room. You see 4 doors on the side walls and a big stairs going up.">
 		<Next
-			action="die"
-			value="end"/>
+			action="left_door_1"
+			next="left_door_1"/>
+		<Next
+			action="left_door_2"
+			next="left_door_2"/>
+		<Next
+			action="right_door_1"
+			next="right_door_1"/>
+		<Next
+			action="right_door_2"
+			next="right_door_2"/>
+		<Next
+			action="upstairs"
+			next="end"/>
+	</Event>
+	
+	<Event	name="left_door_1"
+		description="Kitchen"
+		text="It's just the kitchen. Nothing to see here.">
+		<Next
+			action="back"
+			next="hall"/>
+	</Event>
+	
+	<Event	name="left_door_2"
+		description="door blocked"
+		text="The door is blocked.">
+		<Next
+			action="back"
+			next="hall"/>
+	</Event>
+	
+	<Event	name="right_door_1"
+		description="door blocked"
+		text="The door is blocked.">
+		<Next
+			action="back"
+			next="hall"/>
+	</Event>
+	
+	<Event	name="right_door_2"
+		description="room with chest"
+		text="You enter a little room with a chest in the corner.">
+		<Next
+			action="chest"
+			reward="golden plate armor"
+			next="hall"/>
+		<Next
+			action="back"
+			next="hall"/>
 	</Event>
 	
 <!-- EAST_ENTRY -->
@@ -71,16 +138,14 @@
 		description="Player choose to go right."
 		text="You walk in an old and dark forest and get lost.">
 		<Next
-			action="die"
-			value="end"/>
+			action="die"/>
 	</Event>	
 
-<!-- END -->
-	<Event	name="end"
-		description="The player loose."
-		text="GAME OVER">
+	<Event name="end"
+		description=""
+		text="YOU DIE!">
 		<Next
-			action=""
-			value=""/>
+			action="die"/>
 	</Event>
+
 </Story>

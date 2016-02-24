@@ -40,6 +40,7 @@ class MyCharacter:
         self.HP = HP
         self.name = name
         self.level= level
+        self.gold= 0
         
         self.equipment= {}
         self.equipment["weapon"]=None
@@ -127,8 +128,8 @@ class MyCharacter:
         The key for this object is the itemObject.name 
     '''
     def addToBag(self, itemObject):
-        self.bag[itemObject.name]= itemObject
-        print("Item put in bag: %s" % itemObject.name)
+        self.bag[itemObject.name()]= itemObject
+        print("Item put in bag: %s" % itemObject.name())
     
     '''
     itemObject getFromBag(itemName)
@@ -159,6 +160,7 @@ class MyCharacter:
         item= self.bag.get(itemName)
         if item is not None:
             if item.get('usable') is None:
+                print('Not usable')
                 return
             else:
                 #If it's not a potion we remove the object from the bag
@@ -169,7 +171,8 @@ class MyCharacter:
                     print("No such object in the bag.")
                 else:
                     item.use(self)
-            
+        else:
+            print("none obj") 
                 
     
     ########################################
